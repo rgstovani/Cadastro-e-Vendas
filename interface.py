@@ -52,7 +52,7 @@ def tela_cadastro_cliente():
     frame1 = [[sg.Text('Nome: '), sg.Input(key='-nome-', size=(40,1)), sg.Text('CPF:'), sg.Input(key='-cpf-', size=(15,1)), sg.Button('Validar', size=(10,1))],
               [sg.Text('Telefone: '), sg.Input(key='-telefone-', size=(20,1)), sg.Text('E-mail:'), sg.Input(key='-email-', size=(45,1))]]
 
-    frame2 = [[sg.Text('CEP:'),sg.Input(key='cep', size=(15,1)), sg.Button('Verificar', size=(10,1))],
+    frame2 = [[sg.Text('CEP:'),sg.Input(key='-cep-', size=(15,1)), sg.Button('Verificar', size=(10,1))],
               [sg.Text('Endereço: '), sg.Input(key='-endereco-', size=(58,1)), sg.Text('Nº:'), sg.Input(key='-num-', size=(10,1))],
               [sg.Text('Bairro: '), sg.Input(key='-bairro-', size=(25,1)), sg.Text('Cidade:'), sg.Input(key='-cidade-', size=(25,1)),
                sg.Text('Estado:'), sg.Input(key='-estado-', size=(7,1))]]
@@ -91,6 +91,7 @@ janela1, janela2, janela3, janela4, janela5, janela6, janela7, janela8, janela9,
 
 while True:
     cria_bd_usuarios()
+    cria_bd_clientes()
     janela, eventos, valores = sg.read_all_windows()
     print(eventos, valores)
     if eventos == sg.WIN_CLOSED:
@@ -167,7 +168,11 @@ while True:
     if janela == janela7 and eventos == 'Verificar':
         pass
     if janela == janela7 and eventos == 'Cadastrar':
-        pass
+        add_clientes_bd(valores['-nome-'], valores['-cpf-'], valores['-telefone-'], valores['-email-'],
+                        valores['-cep-'], valores['-endereco-'], valores['-num-'], valores['-bairro-'],
+                        valores['-cidade-'], valores['-estado-'])
+        janela7.hide()
+        janela7 = tela_cadastro_cliente()
     if janela == janela7 and eventos == 'Voltar':
         janela7.hide()
         janela3 = tela_menu_admin()
