@@ -1,5 +1,3 @@
-import PySimpleGUI as sg
-
 def add_remove_linha():
     lista = 'Produto1', 'Produto2'
 
@@ -11,26 +9,27 @@ def add_remove_linha():
     layout = [[coluna]] + [[sg.Button('+ Linha', key='-addlinha-')] + [sg.Button('- Linha', key='-removelinha-')] + [sg.Push()] + [sg.Button('Adicionar')]]
 
 
-    window = sg.Window('Produtos', layout)
+    janela11 = sg.Window('Produtos', layout)
     i = 1
     while True:  # Event Loop
-        event, values = window.read()
+        event, values = janela11.read()
         if event in (None, 'Exit'):
             break
         if event == '-addlinha-':
             if i > 9:
                 i = 9
-            window[str(i)](visible=True)
+            janela11[str(i)](visible=True)
             i += 1
             coluna.contents_changed()
         if event == '-removelinha-':
             i -= 1
             if i < 0:
                 i = 0
-            window[str(i)](visible=False)
+            janela11[str(i)](visible=False)
             coluna.contents_changed()
-        print(values, event)
-    window.close()
+        if event == 'Adicionar':
+            janela9.enable()
+            janela11.hide()
 
-add_remove_linha()
-
+    janela11.close()
+    return values, event

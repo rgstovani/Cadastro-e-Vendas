@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from funcoes_banco import *
 
 sg.theme('DarkPurple')
 
@@ -6,7 +7,7 @@ def tela_login():
     janela1 = [[sg.Text('Usuario:')],
                [sg.Input(key='-usuario-', size=(30,1))],
                [sg.Text('Senha:')],
-               [sg.Input(key='-senha-', size=(30,1))],
+               [sg.Input(key='-senha-', size=(30,1), password_char='*')],
                [sg.Button('Login'), sg.Push(), sg.Button('Esqueci a Senha')]]
     return sg.Window('Tela de Login', janela1, finalize=True)
 def tela_esqueci_senha():
@@ -89,14 +90,21 @@ def tela_redefinir_senha():
 janela1, janela2, janela3, janela4, janela5, janela6, janela7, janela8, janela9, janela10, janela11 = tela_login(), None, None, None, None, None, None, None, None, None, None
 
 while True:
+    cria_bd_usuarios()
     janela, eventos, valores = sg.read_all_windows()
+    print(eventos, valores)
     if eventos == sg.WIN_CLOSED:
         break
 
     #Interações Janela 1 - Tela Login
     if janela == janela1 and eventos == 'Login':
-        janela1.hide()
-        janela3 = tela_menu_admin()
+        login = teste_login(valores['-usuario-'], valores['-senha-'])
+        if login == False:
+            sg.Popup('Usuario/senha invalido.')
+        if login == True:
+            janela1.hide()
+            janela3 = tela_menu_admin()
+
     if janela == janela1 and eventos == 'Esqueci a Senha':
         janela1.hide()
         janela2 = tela_esqueci_senha()
@@ -137,7 +145,11 @@ while True:
 
     # Interações Janela 5 - Cadastro de Usuario
     if janela == janela5 and eventos == 'Cadastrar':
-        pass
+        cadastra_user(valores['-usuario-'], valores['-senha-'], valores['-email-'])
+        sg.PopupOK('Usuario Cadastrado')
+        janela5.hide()
+        janela5 = tela_cadastrar_usuario()
+
     if janela == janela5 and eventos == 'Voltar':
         janela5.hide()
         janela3 = tela_menu_admin()
