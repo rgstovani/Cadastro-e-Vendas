@@ -78,9 +78,74 @@ def consulta_clientes_bd():
     conn = sqlite3.connect('App_Dados.db')
     cursor = conn.cursor()
     cursor.execute('''
-    SELECT * FROM clientes WHERE (NOME=?, CPF=?, TELEFONE=?, EMAIL=?, CEP=?, ENDERECO=?, NUM=?, BAIRRO=?, CIDADE=?, ESTADO=?)
-    ''', (nome, cpf, telefone, email, cep, endereco, num, bairro, cidade, estado))
-    dados = cursor.fetchone()
+    SELECT oid, * FROM clientes''')
+    dados = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return dados
+
+###################### PRODUTOS ######################
+
+def cria_bd_produtos():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS produtos (
+    PRODUTO TEXT NOT NULL,
+    MARCA TEXT NOT NULL,
+    UNIDADE TEXT NOT NULL,
+    VALOR TEXT NOT NULL);
+    ''')
+    conn.commit()
+    conn.close()
+def add_produtos_bd(produto, marca, unidade, valor):
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT INTO produtos VALUES (:PRODUTO, :MARCA, :UNIDADE, :VALOR)
+    ''', {"PRODUTO": produto, "MARCA": marca, "UNIDADE": unidade, "VALOR": valor})
+    conn.commit()
+    conn.close()
+
+def consulta_produtos_bd():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT oid, * FROM produtos''')
+    dados = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return dados
+
+###################### VENDAS ######################
+
+def cria_bd_vendas():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS vendas (
+    PRODUTO TEXT NOT NULL,
+    MARCA TEXT NOT NULL,
+    UNIDADE TEXT NOT NULL,
+    VALOR TEXT NOT NULL);
+    ''')
+    conn.commit()
+    conn.close()
+def add_vendas_bd(produto, marca, unidade, valor):
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT INTO vendas VALUES (:PRODUTO, :MARCA, :UNIDADE, :VALOR)
+    ''', {"PRODUTO": produto, "MARCA": marca, "UNIDADE": unidade, "VALOR": valor})
+    conn.commit()
+    conn.close()
+
+def consulta_vendas_bd():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT oid, * FROM vendas''')
+    dados = cursor.fetchall()
     conn.commit()
     conn.close()
     return dados
