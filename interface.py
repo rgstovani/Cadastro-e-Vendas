@@ -35,19 +35,20 @@ def tela_cadastrar_usuario():
     janela5 = [[sg.Text('Digite o Usuario:')],
                [sg.Input(key='-usuario-', size=(20,1))],
                [sg.Text('Digite a Senha:')],
-               [sg.Input(key='-senha-', size=(15,1))],
+               [sg.Input(key='-senha-', size=(15,1), password_char='*')],
                [sg.Text('Repita a Senha:')],
-               [sg.Input(key='-repsenha-', size=(15,1))],
+               [sg.Input(key='-repsenha-', size=(15,1), password_char='*')],
                [sg.Text('Digite o E-mail')],
                [sg.Input(key='-email-', size=(30,1))],
                [sg.Button('Cadastrar'), sg.Push(), sg.Button('Voltar')],
     ]
     return sg.Window('Cadastrar novo usuario', janela5, finalize=True)
 def tela_exclusao():
+    usuarios = retornar_user_bd()
     janela6 = [[sg.Text('Selecione o usuario a ser excluido:')],
-               [sg.Combo('usuarios', size=(20,1))],
+               [sg.Combo(usuarios, size=(20,1), key='del_selecao')],
                [sg.Button('Confirmar'), sg.Push(), sg.Button('Voltar')]]
-    return sg.Window('Exclusão', janela6, finalize=True)
+    return sg.Window('Exclusão de Usuarios', janela6, finalize=True)
 def tela_cadastro_cliente():
     frame1 = [[sg.Text('Nome: '), sg.Input(key='-nome-', size=(40,1)), sg.Text('CPF:'), sg.Input(key='-cpf-', size=(15,1)), sg.Button('Validar', size=(10,1))],
               [sg.Text('Telefone: '), sg.Input(key='-telefone-', size=(20,1)), sg.Text('E-mail:'), sg.Input(key='-email-', size=(45,1))]]
@@ -89,13 +90,13 @@ def tela_redefinir_senha():
 def tela_consulta_cliente():
     clientes = consulta_clientes_bd()
     janela11 = [[sg.Table(clientes, justification='left', headings=['ID', 'NOME', 'CPF', 'TELEFONE', 'EMAIL', 'CEP', 'ENDERECO', 'NUM', 'BAIRRO', 'CIDADE', 'ESTADO'])],
-                [sg.Button('Voltar')]]
+                [sg.Button('Voltar'), sg.Push(), sg.Button('Excluir')]]
 
     return sg.Window('Consulta de Clientes', janela11, finalize=True)
 def tela_consulta_produtos():
     produtos = consulta_produtos_bd()
     janela12 = [[sg.Table(produtos, justification='left', headings=['ID', 'PRODUTO', 'MARCA', 'UNIDADE', 'VALOR'])],
-                [sg.Button('Voltar')]]
+                [sg.Button('Voltar'), sg.Push(), sg.Button('Excluir')]]
 
     return sg.Window('Consulta de Produtos', janela12, finalize=True)
 def tela_consulta_vendas():
@@ -104,10 +105,22 @@ def tela_consulta_vendas():
                 [sg.Button('Voltar')]]
 
     return sg.Window('Consulta de Vendas', janela13, finalize=True)
+def tela_excluir_produto():
+    produtos = retornar_produto_bd()
+    janela14 = [[sg.Text('Selecione o produto a ser excluido:')],
+               [sg.Combo(produtos, size=(20,1), key='del_selecao_prod')],
+               [sg.Button('Confirmar'), sg.Push(), sg.Button('Voltar')]]
+    return sg.Window('Exclusão de Produto', janela14, finalize=True)
+def tela_excluir_cliente():
+    clientes = retornar_cliente_bd()
+    janela15 = [[sg.Text('Selecione o cliente a ser excluido:')],
+               [sg.Combo(clientes, size=(20,1), key='del_selecao_cli')],
+               [sg.Button('Confirmar'), sg.Push(), sg.Button('Voltar')]]
+    return sg.Window('Exclusão de Cliente', janela15, finalize=True)
 
 
 janela1, janela2, janela3, janela4, janela5, janela6, janela7, janela8, janela9, janela10, \
-janela11, janela12, janela13 = tela_login(), None, None, None, None, None, None, None, None, None, None, None, None
+janela11, janela12, janela13, janela14, janela15 = tela_login(), None, None, None, None, None, None, None, None, None, None, None, None, None, None
 
 while True:
     cria_bd()
@@ -171,17 +184,25 @@ while True:
 
     if janela == janela5:   # Interações Janela 5 - Cadastro de Usuario
         if eventos == 'Cadastrar':
-            cadastra_user(valores['-usuario-'], valores['-senha-'], valores['-email-'])
-            sg.PopupOK('Usuario Cadastrado')
-            janela5.hide()
-            janela5 = tela_cadastrar_usuario()
+            if valores['-senha-'] == valores['-repsenha-']:
+                cadastra_user(valores['-usuario-'], valores['-senha-'], valores['-email-'])
+                sg.PopupOK('Usuario Cadastrado')
+                janela5.hide()
+                janela5 = tela_cadastrar_usuario()
+            else:
+                sg.Popup('As Senhas não coincidem.')
         if eventos == 'Voltar':
             janela5.hide()
             janela3 = tela_menu_admin()
 
     if janela == janela6:   # Interações Janela 6 - Exclusão de Usuario
         if eventos == 'Confirmar':
-            pass
+            selecao = valores['del_selecao']
+            deleta_user_bd(selecao)
+            sg.PopupOK('Usuario deletado.')
+            janela6.hide()
+            janela6 = tela_exclusao()
+
         if eventos == 'Voltar':
             janela6.hide()
             janela3 = tela_menu_admin()
@@ -207,9 +228,9 @@ while True:
                 sg.Popup('CEP invalido.')
 
         if eventos == 'Cadastrar':
-            if valores['-nome-'] or valores['-cpf-'] or valores['-telefone-'] or valores['-email-'] or \
-                    valores['-cep-'] or valores['-endereco-'] or valores['-num-'] or valores['-bairro-'] or \
-                    valores['-cidade-'] or valores['-estado-'] != "":
+            if valores['-nome-'] and valores['-cpf-'] and valores['-telefone-'] and valores['-email-'] and \
+                    valores['-cep-'] and valores['-endereco-'] and valores['-num-'] and valores['-bairro-'] and \
+                    valores['-cidade-'] and valores['-estado-'] != "":
                 validade_cpf = validador_cpf(valores['-cpf-'])
                 if validade_cpf == True:
                     add_clientes_bd(valores['-nome-'], valores['-cpf-'], valores['-telefone-'], valores['-email-'],
@@ -241,7 +262,6 @@ while True:
             janela8.hide()
             janela3 = tela_menu_admin()
 
-
     if janela == janela9:   # Interações Janela 9 - Nova Venda
         if eventos == 'Adicionar':
             pass
@@ -263,11 +283,19 @@ while True:
             janela1 = tela_login()
 
     if janela == janela11:  # Interações Janela 11 - Consulta Clientes
+        if eventos == 'Excluir':
+            janela11.disable()
+            janela15 = tela_excluir_cliente()
+
         if eventos == 'Voltar':
             janela11.hide()
             janela3 = tela_menu_admin()
 
-    if janela == janela12:  # Interações Janela 12 - Consulta Clientes
+    if janela == janela12:  # Interações Janela 12 - Consulta Produtos
+        if eventos == 'Excluir':
+            janela12.disable()
+            janela14 = tela_excluir_produto()
+
         if eventos == 'Voltar':
             janela12.hide()
             janela3 = tela_menu_admin()
@@ -276,5 +304,33 @@ while True:
         if eventos == 'Voltar':
             janela13.hide()
             janela3 = tela_menu_admin()
+
+    if janela == janela14:  # Interações Janela 14 - Exclusão de Produtos
+        if eventos == 'Confirmar':
+            selecao = valores['del_selecao_prod']
+            deleta_produto_bd(selecao)
+            sg.PopupOK('Produto deletado.')
+            janela12.close()
+            janela12 = tela_consulta_produtos()
+            janela14.hide()
+
+        if eventos == 'Voltar':
+            janela12.enable()
+            janela14.hide()
+
+    if janela == janela15:  # Interações Janela 14 - Exclusão de Clientes
+        if eventos == 'Confirmar':
+            selecao = valores['del_selecao_cli']
+            deleta_cliente_bd(selecao)
+            sg.PopupOK('cliente deletado.')
+            janela11.close()
+            janela11 = tela_consulta_cliente()
+            janela15.hide()
+
+        if eventos == 'Voltar':
+            janela11.enable()
+            janela15.hide()
+
+
 
 janela.close()

@@ -52,6 +52,27 @@ def teste_login(usuario, senha):
     testesenha = sha256(senha.encode()).hexdigest()
     return (consulta_user_bd(usuario, testesenha))
 
+def retornar_user_bd():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT USER FROM users
+    ''')
+    usuarios = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return usuarios
+
+def deleta_user_bd(selecao):
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    DELETE FROM users WHERE USER = ?
+    ''', selecao)
+    conn.commit()
+    conn.close()
+
+
 ###################### CLIENTES ######################
 
 def cria_bd_clientes():
@@ -90,6 +111,26 @@ def consulta_clientes_bd():
     conn.close()
     return dados
 
+def retornar_cliente_bd():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT NOME FROM clientes
+    ''')
+    clientes = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return clientes
+
+def deleta_cliente_bd(selecao):
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    DELETE FROM clientes WHERE NOME = ?
+    ''', selecao)
+    conn.commit()
+    conn.close()
+
 ###################### PRODUTOS ######################
 
 def cria_bd_produtos():
@@ -121,6 +162,28 @@ def consulta_produtos_bd():
     conn.commit()
     conn.close()
     return dados
+
+def retornar_produto_bd():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT PRODUTO FROM produtos
+    ''')
+    produto = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return produto
+
+def deleta_produto_bd(selecao):
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    DELETE FROM produtos WHERE PRODUTO = ?
+    ''', selecao)
+    conn.commit()
+    conn.close()
+
+
 
 ###################### VENDAS ######################
 
