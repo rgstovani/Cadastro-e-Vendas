@@ -369,8 +369,11 @@ while True:
         if eventos == 'Adicionar':
             produto = valores[0]
             quant = valores[1]
-            print(produto, quant)
-            pass
+
+
+            janela9.enable()
+            janela17.hide()
+
 
         if eventos == 'Cancelar':
             janela9.enable()
@@ -378,3 +381,4 @@ while True:
 
     print(eventos, valores)
 janela.close()
+

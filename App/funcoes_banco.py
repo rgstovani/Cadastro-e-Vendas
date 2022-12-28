@@ -186,7 +186,6 @@ def deleta_produto_bd(selecao):
     ''', selecao)
     conn.commit()
     conn.close()
-
 def retorna_lista_produto_bd():
     conn = sqlite3.connect('App_Dados.db')
     cursor = conn.cursor()
@@ -197,6 +196,16 @@ def retorna_lista_produto_bd():
     conn.commit()
     conn.close()
     return produtos
+def retornar_info_produto_bd(selecao):
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT * FROM produtos WHERE PRODUTO = ?
+    ''', selecao)
+    info = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return info
 
 ###################### VENDAS ######################
 
@@ -286,4 +295,12 @@ def consulta_cep(cep):
     localidade = end['localidade']
     uf = end['uf']
     return cep, logradouro, bairro, localidade, uf
-
+def salva_dados(produto):
+    info_produto = retornar_info_produto_bd(produto)
+    produto= info_produto[0][0]
+    marca= info_produto[0][1]
+    unidade= info_produto[0][2]
+    valor_unitario= info_produto[0][3]
+    quantidade= valores[1]
+    valor_total = valor_unitario * quantidade
+    return produto, marca, unidade, valor_unitario, quantidade, valor_total
