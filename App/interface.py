@@ -376,6 +376,5 @@ while True:
             janela9.enable()
             janela17.hide()
 
-
     print(eventos, valores)
 janela.close()
