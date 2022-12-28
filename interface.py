@@ -88,19 +88,19 @@ def tela_redefinir_senha():
     return sg.Window('Redefinição de Senha', janela10, finalize=True)
 def tela_consulta_cliente():
     clientes = consulta_clientes_bd()
-    janela11 = [[sg.Table(clientes,headings=['ID', 'NOME', 'CPF', 'TELEFONE', 'EMAIL', 'CEP', 'ENDERECO', 'NUM', 'BAIRRO', 'CIDADE', 'ESTADO'])],
+    janela11 = [[sg.Table(clientes, justification='left', headings=['ID', 'NOME', 'CPF', 'TELEFONE', 'EMAIL', 'CEP', 'ENDERECO', 'NUM', 'BAIRRO', 'CIDADE', 'ESTADO'])],
                 [sg.Button('Voltar')]]
 
     return sg.Window('Consulta de Clientes', janela11, finalize=True)
 def tela_consulta_produtos():
     produtos = consulta_produtos_bd()
-    janela12 = [[sg.Table(produtos, headings=['ID', 'PRODUTO', 'MARCA', 'UNIDADE', 'VALOR'])],
+    janela12 = [[sg.Table(produtos, justification='left', headings=['ID', 'PRODUTO', 'MARCA', 'UNIDADE', 'VALOR'])],
                 [sg.Button('Voltar')]]
 
     return sg.Window('Consulta de Produtos', janela12, finalize=True)
 def tela_consulta_vendas():
     # vendas = tela_consulta_vendas()
-    janela13 = [[sg.Table('vendas', headings=['ID', 'PRODUTO', 'MARCA', 'UNIDADE', 'VALOR'])],
+    janela13 = [[sg.Table('vendas', justification='left', headings=['ID', 'PRODUTO', 'MARCA', 'UNIDADE', 'VALOR'])],
                 [sg.Button('Voltar')]]
 
     return sg.Window('Consulta de Vendas', janela13, finalize=True)
@@ -110,138 +110,171 @@ janela1, janela2, janela3, janela4, janela5, janela6, janela7, janela8, janela9,
 janela11, janela12, janela13 = tela_login(), None, None, None, None, None, None, None, None, None, None, None, None
 
 while True:
-    cria_bd_usuarios()
-    cria_bd_clientes()
-    cria_bd_produtos()
-    cria_bd_vendas()
+    cria_bd()
     janela, eventos, valores = sg.read_all_windows()
-    print(eventos, valores)
     if eventos == sg.WIN_CLOSED:
         break
 
-    #Interações Janela 1 - Tela Login
-    if janela == janela1 and eventos == 'Login':
-        login = teste_login(valores['-usuario-'], valores['-senha-'])
-        if login == False:
-            sg.Popup('Usuario/senha invalido.')
-        if login == True:
+    if janela == janela1:   #Interações Janela 1 - Tela Login
+        if eventos == 'Login':
+            if (valores['-usuario-'] == 'admin') and (valores['-senha-'] == 'admin'):
+                janela1.hide()
+                janela3 = tela_menu_admin()
+            else:
+                login = teste_login(valores['-usuario-'], valores['-senha-'])
+                if login == False:
+                    sg.Popup('Usuario/senha invalido.')
+                if login == True:
+                    janela1.hide()
+                    janela3 = tela_menu_admin()
+
+        if eventos == 'Esqueci a Senha':
             janela1.hide()
-            janela3 = tela_menu_admin()
+            janela2 = tela_esqueci_senha()
 
-    if janela == janela1 and eventos == 'Esqueci a Senha':
-        janela1.hide()
-        janela2 = tela_esqueci_senha()
+    if janela == janela2:   #Interações Janela 2 - Alterar Senha
+        if eventos == 'Alterar Senha':
+            janela2.disable()
+            janela10 = tela_redefinir_senha()
+        if eventos == 'Voltar':
+            janela2.hide()
+            janela1 = tela_login()
 
-    #Interações Janela 2 - Alterar Senha
-    if janela == janela2 and eventos == 'Alterar Senha':
-        janela2.disable()
-        janela10 = tela_redefinir_senha()
-    if janela == janela2 and eventos == 'Voltar':
-        janela2.hide()
-        janela1 = tela_login()
-
-    #Interações Janela 3 - Menu ADM
-    if janela == janela3 and eventos == 'Novo Cliente':
-        janela3.hide()
-        janela7 = tela_cadastro_cliente()
-    if janela == janela3 and eventos == 'Consultar Cliente':
-        janela3.hide()
-        janela11 = tela_consulta_cliente()
-    if janela == janela3 and eventos == 'Nova Venda':
-        janela3.hide()
-        janela9 = tela_nova_venda()
-    if janela == janela3 and eventos == 'Consultar Venda':
-        janela3.hide()
-        janela13 = consulta_vendas_bd()
-    if janela == janela3 and eventos == 'Novo Usuario':
-        janela3.hide()
-        janela5 = tela_cadastrar_usuario()
-    if janela == janela3 and eventos == 'Excluir Usuario':
-        janela3.hide()
-        janela6 = tela_exclusao()
-    if janela == janela3 and eventos == 'Novo Produto':
-        janela3.hide()
-        janela8 = tela_cadastro_produtos()
-    if janela == janela3 and eventos == 'Consultar Produto':
-        janela3.hide()
-        janela12 = tela_consulta_produtos()
-
+    if janela == janela3:   #Interações Janela 3 - Menu ADM
+        if eventos == 'Novo Cliente':
+            janela3.hide()
+            janela7 = tela_cadastro_cliente()
+        if eventos == 'Consultar Cliente':
+            janela3.hide()
+            janela11 = tela_consulta_cliente()
+        if eventos == 'Nova Venda':
+            janela3.hide()
+            janela9 = tela_nova_venda()
+        if eventos == 'Consultar Venda':
+            janela3.hide()
+            janela13 = tela_consulta_vendas()
+        if eventos == 'Novo Usuario':
+            janela3.hide()
+            janela5 = tela_cadastrar_usuario()
+        if eventos == 'Excluir Usuario':
+            janela3.hide()
+            janela6 = tela_exclusao()
+        if eventos == 'Novo Produto':
+            janela3.hide()
+            janela8 = tela_cadastro_produtos()
+        if eventos == 'Consultar Produto':
+            janela3.hide()
+            janela12 = tela_consulta_produtos()
     # Interações Janela 4 - Menu User
 
 
-    # Interações Janela 5 - Cadastro de Usuario
-    if janela == janela5 and eventos == 'Cadastrar':
-        cadastra_user(valores['-usuario-'], valores['-senha-'], valores['-email-'])
-        sg.PopupOK('Usuario Cadastrado')
-        janela5.hide()
-        janela5 = tela_cadastrar_usuario()
 
-    if janela == janela5 and eventos == 'Voltar':
-        janela5.hide()
-        janela3 = tela_menu_admin()
+    if janela == janela5:   # Interações Janela 5 - Cadastro de Usuario
+        if eventos == 'Cadastrar':
+            cadastra_user(valores['-usuario-'], valores['-senha-'], valores['-email-'])
+            sg.PopupOK('Usuario Cadastrado')
+            janela5.hide()
+            janela5 = tela_cadastrar_usuario()
+        if eventos == 'Voltar':
+            janela5.hide()
+            janela3 = tela_menu_admin()
 
-    # Interações Janela 6 - Exclusão de Usuario
-    if janela == janela6 and eventos == 'Confirmar':
-        pass
-    if janela == janela6 and eventos == 'Voltar':
-        janela6.hide()
-        janela3 = tela_menu_admin()
+    if janela == janela6:   # Interações Janela 6 - Exclusão de Usuario
+        if eventos == 'Confirmar':
+            pass
+        if eventos == 'Voltar':
+            janela6.hide()
+            janela3 = tela_menu_admin()
 
-    # Interações Janela 7 - Cadastro de Cliente
-    if janela == janela7 and eventos == 'Validar':
-        pass
-    if janela == janela7 and eventos == 'Verificar':
-        pass
-    if janela == janela7 and eventos == 'Cadastrar':
-        add_clientes_bd(valores['-nome-'], valores['-cpf-'], valores['-telefone-'], valores['-email-'],
-                        valores['-cep-'], valores['-endereco-'], valores['-num-'], valores['-bairro-'],
-                        valores['-cidade-'], valores['-estado-'])
-        janela7.hide()
-        janela7 = tela_cadastro_cliente()
-    if janela == janela7 and eventos == 'Voltar':
-        janela7.hide()
-        janela3 = tela_menu_admin()
+    if janela == janela7:   # Interações Janela 7 - Cadastro de Cliente
+        if eventos == 'Validar':
+            validade_cpf = validador_cpf(valores['-cpf-'])
+            if validade_cpf == True:
+                sg.Popup('CPF Valido.')
+            if validade_cpf == False:
+                sg.Popup('CPF Invalido.')
 
-    # Interações Janela 8 - Cadastro de Produtos
-    if janela == janela8 and eventos == 'Cadastrar':
-        add_produtos_bd(valores['-produto-'],valores['-marca-'],valores['-unidade-'],valores['-valor-'])
-        janela8.hide()
-        janela8 = tela_cadastro_produtos()
-    if janela == janela8 and eventos == 'Voltar':
-        janela8.hide()
-        janela3 = tela_menu_admin()
+        if eventos == 'Verificar':
+            cep = valores['-cep-']
+            cep = cep.replace('-','').replace('.', '').replace(' ','')
+            if len(cep) == 8:
+                r = consulta_cep(cep)
+                janela7['-endereco-'].update(r[1])
+                janela7['-bairro-'].update(r[2])
+                janela7['-cidade-'].update(r[3])
+                janela7['-estado-'].update(r[4])
+            else:
+                sg.Popup('CEP invalido.')
 
-    # Interações Janela 9 - Nova Venda
-    if janela == janela9 and eventos == 'Adicionar':
-        pass
-    if janela == janela9 and eventos == 'Finalizar Venda':
-        pass
-    if janela == janela9 and eventos == 'Voltar':
-        janela9.hide()
-        janela3 = tela_menu_admin()
+        if eventos == 'Cadastrar':
+            if valores['-nome-'] or valores['-cpf-'] or valores['-telefone-'] or valores['-email-'] or \
+                    valores['-cep-'] or valores['-endereco-'] or valores['-num-'] or valores['-bairro-'] or \
+                    valores['-cidade-'] or valores['-estado-'] != "":
+                validade_cpf = validador_cpf(valores['-cpf-'])
+                if validade_cpf == True:
+                    add_clientes_bd(valores['-nome-'], valores['-cpf-'], valores['-telefone-'], valores['-email-'],
+                                    valores['-cep-'], valores['-endereco-'], valores['-num-'], valores['-bairro-'],
+                                    valores['-cidade-'], valores['-estado-'])
+                    sg.Popup('Cliente Cadastrado\ncom sucesso!')
+                    janela7.hide()
+                    janela7 = tela_cadastro_cliente()
+                else:
+                    sg.Popup('Verifique o CPF do Cliente.')
+            else:
+                sg.Popup('Preencha todos os campos.')
 
-    # Interações Janela 10 - Redefinir Senha
-    if janela == janela10 and eventos == 'Redefinir':
-        pass
-    if janela == janela10 and eventos == 'Cancelar':
-        janela2.hide()
-        janela10.hide()
-        janela1 = tela_login()
+        if eventos == 'Voltar':
+            janela7.hide()
+            janela3 = tela_menu_admin()
 
-    # Interações Janela 11 - Consulta Clientes
-    if janela == janela11 and eventos == 'Voltar':
-        janela11.hide()
-        janela3 = tela_menu_admin()
+    if janela == janela8:   # Interações Janela 8 - Cadastro de Produtos
+        if eventos == 'Cadastrar':
+            if valores['-produto-'] or valores['-marca-'] or valores['-unidade-'] or valores['-valor-'] != "":
+                add_produtos_bd(valores['-produto-'],valores['-marca-'],valores['-unidade-'],valores['-valor-'])
+                sg.Popup('Produto cadastrado.')
+                janela8.hide()
+                janela8 = tela_cadastro_produtos()
+            else:
+                sg.Popup('Preencha todos os campos.')
 
-    # Interações Janela 12 - Consulta Clientes
-    if janela == janela12 and eventos == 'Voltar':
-        janela12.hide()
-        janela3 = tela_menu_admin()
+        if eventos == 'Voltar':
+            janela8.hide()
+            janela3 = tela_menu_admin()
 
-    # Interações Janela 13 - Consulta Vendas
-    if janela == janela13 and eventos == 'Voltar':
-        janela13.hide()
-        janela3 = tela_menu_admin()
 
+    if janela == janela9:   # Interações Janela 9 - Nova Venda
+        if eventos == 'Adicionar':
+            pass
+
+        if eventos == 'Finalizar Venda':
+            pass
+
+        if eventos == 'Voltar':
+            janela9.hide()
+            janela3 = tela_menu_admin()
+
+    if janela == janela10:  # Interações Janela 10 - Redefinir Senha
+        if eventos == 'Redefinir':
+            pass
+
+        if eventos == 'Cancelar':
+            janela2.hide()
+            janela10.hide()
+            janela1 = tela_login()
+
+    if janela == janela11:  # Interações Janela 11 - Consulta Clientes
+        if eventos == 'Voltar':
+            janela11.hide()
+            janela3 = tela_menu_admin()
+
+    if janela == janela12:  # Interações Janela 12 - Consulta Clientes
+        if eventos == 'Voltar':
+            janela12.hide()
+            janela3 = tela_menu_admin()
+
+    if janela == janela13:  # Interações Janela 13 - Consulta Vendas
+        if eventos == 'Voltar':
+            janela13.hide()
+            janela3 = tela_menu_admin()
 
 janela.close()
