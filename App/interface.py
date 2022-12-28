@@ -70,9 +70,9 @@ def tela_cadastro_produtos():
     return sg.Window('Cadastro de Produtos', janela8, finalize=True)
 def tela_nova_venda():
     pagamento = ['Dinheiro', 'Cartão de Debito', 'Cartão de Credito', 'Cheque']
-    dados = 'teste'
-    frame1 = [[sg.Table(dados, def_col_width=16, auto_size_columns=False, headings=['Quant.', 'Produto', 'Marca', 'Valor Unitario', 'Valor Total'])]]
-    frame2 = [[sg.Text('Endereço:'), sg.Text(size=(30,1), key='-endereco-'), sg.Text('Numero:'),
+    dados = ''
+    frame1 = [[sg.Table(dados, key='-tabela-', def_col_width=16, auto_size_columns=False, headings=['Produto', 'Marca', 'Valor Unitario', 'Quant.', 'Valor Total'])]]
+    frame2 = [[sg.Text('Rua:'), sg.Text(size=(30,1), key='-endereco-'), sg.Text('Numero:'),
                sg.Text(size=(8,1), key='-num-'), sg.Text('Cidade:'), sg.Text(size=(20,1), key='-cidade-')]]
     frame3 = [[sg.Text('Forma de Pagto'), sg.Combo(pagamento), sg.Text('Valor Total'), sg.Text(key='-valortotal-', size=(10,1))]]
 
@@ -368,7 +368,11 @@ while True:
     if janela == janela17:
         if eventos == 'Adicionar':
             produto = valores[0]
-            quant = valores[1]
+            quant = int(valores[1])
+            iprod = (retornar_info_produto_bd(produto))
+            info_produto = [iprod[0][0],iprod[0][1],iprod[0][3], quant, (int(iprod[0][3]) * quant)]
+            janela9['-tabela-'].update(info_produto)
+
 
 
             janela9.enable()
