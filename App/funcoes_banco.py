@@ -51,7 +51,7 @@ def cadastra_user(usuario, senha, email):
 def teste_login(usuario, senha):
     testesenha = sha256(senha.encode()).hexdigest()
     return (consulta_user_bd(usuario, testesenha))
-def retornar_user_bd():
+def retorna_lista_user_bd():
     conn = sqlite3.connect('App_Dados.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -186,6 +186,17 @@ def deleta_produto_bd(selecao):
     ''', selecao)
     conn.commit()
     conn.close()
+
+def retorna_lista_produto_bd():
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT PRODUTO FROM produtos
+    ''')
+    produtos = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return produtos
 
 ###################### VENDAS ######################
 

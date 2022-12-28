@@ -44,7 +44,7 @@ def tela_cadastrar_usuario():
     ]
     return sg.Window('Cadastrar novo usuario', janela5, finalize=True)
 def tela_exclusao():
-    usuarios = retornar_user_bd()
+    usuarios = retorna_lista_user_bd()
     janela6 = [[sg.Text('Selecione o usuario a ser excluido:')],
                [sg.Combo(usuarios, size=(20,1), key='del_selecao')],
                [sg.Button('Confirmar'), sg.Push(), sg.Button('Voltar')]]
@@ -71,7 +71,7 @@ def tela_cadastro_produtos():
 def tela_nova_venda():
     pagamento = ['Dinheiro', 'Cartão de Debito', 'Cartão de Credito', 'Cheque']
     dados = 'teste'
-    frame1 = [[sg.Table(dados, def_col_width=16, auto_size_columns=False, headings=['Quant.', 'Produto', 'Valor Unitario', 'Valor Total'])]]
+    frame1 = [[sg.Table(dados, def_col_width=16, auto_size_columns=False, headings=['Quant.', 'Produto', 'Marca', 'Valor Unitario', 'Valor Total'])]]
     frame2 = [[sg.Text('Endereço:'), sg.Text(size=(30,1), key='-endereco-'), sg.Text('Numero:'),
                sg.Text(size=(8,1), key='-num-'), sg.Text('Cidade:'), sg.Text(size=(20,1), key='-cidade-')]]
     frame3 = [[sg.Text('Forma de Pagto'), sg.Combo(pagamento), sg.Text('Valor Total'), sg.Text(key='-valortotal-', size=(10,1))]]
@@ -124,10 +124,17 @@ def tela_cons_cliente():
                [sg.Combo(clientes, size=(20,1), key='compra_selecao_cli')],
                [sg.Button('Confirmar'), sg.Push(), sg.Button('Voltar')]]
     return sg.Window('Seleção de Cliente', janela16, finalize=True)
+def tela_adiciona_produto():
+    lista = retorna_lista_produto_bd()
+    janela17 = [[sg.Text('Selecione o Produto:')],
+                [sg.Combo(lista, size=(15,1)), sg.Spin([1,2,3,4,5,6,7,8,9], initial_value=1, size=(3,1))],
+                [sg.Button('Adicionar'), sg.Button('Cancelar')]]
+
+    return sg.Window('Adiciona Produto', janela17, finalize=True)
 
 
 janela1, janela2, janela3, janela4, janela5, janela6, janela7, janela8, janela9, janela10, \
-janela11, janela12, janela13, janela14, janela15, janela16 = tela_login(), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
+janela11, janela12, janela13, janela14, janela15, janela16, janela17 = tela_login(), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
 
 while True:
     cria_bd()
@@ -275,7 +282,8 @@ while True:
             janela16 = tela_cons_cliente()
 
         if eventos == 'Adicionar':
-            pass
+            janela9.disable()
+            janela17 = tela_adiciona_produto()
 
         if eventos == 'Finalizar Venda':
             pass
@@ -357,4 +365,17 @@ while True:
             janela9.enable()
             janela16.hide()
 
+    if janela == janela17:
+        if eventos == 'Adicionar':
+            produto = valores[0]
+            quant = valores[1]
+            print(produto, quant)
+            pass
+
+        if eventos == 'Cancelar':
+            janela9.enable()
+            janela17.hide()
+
+
+    print(eventos, valores)
 janela.close()
