@@ -3,6 +3,7 @@ from funcoes_banco import *
 
 sg.theme('DarkPurple')
 
+
 def tela_login():
     janela1 = [[sg.Text('Usuario:')],
                [sg.Input(key='-usuario-', size=(30,1))],
@@ -69,12 +70,15 @@ def tela_cadastro_produtos():
                [sg.Button('Cadastrar'), sg.Button('Voltar')]]
     return sg.Window('Cadastro de Produtos', janela8, finalize=True)
 def tela_nova_venda():
+
     pagamento = ['Dinheiro', 'Cartão de Debito', 'Cartão de Credito', 'Cheque']
-    dados = ''
-    frame1 = [[sg.Table(dados, key='-tabela-', def_col_width=16, auto_size_columns=False, headings=['Produto', 'Marca', 'Valor Unitario', 'Quant.', 'Valor Total'])]]
+    frame1 = [[sg.Table(values=dados, headings=['Produto', 'Marca', 'Valor Unitario', 'Quant.', 'Valor Total'],
+                        key='-tabela-', col_widths=[16,16,16,8,12], auto_size_columns=False, justification='left',
+                        background_color='gray', text_color='black')]]
     frame2 = [[sg.Text('Rua:'), sg.Text(size=(30,1), key='-endereco-'), sg.Text('Numero:'),
                sg.Text(size=(8,1), key='-num-'), sg.Text('Cidade:'), sg.Text(size=(20,1), key='-cidade-')]]
-    frame3 = [[sg.Text('Forma de Pagto'), sg.Combo(pagamento), sg.Text('Valor Total'), sg.Text(key='-valortotal-', size=(10,1))]]
+    frame3 = [[sg.Text('Forma de Pagto'), sg.Combo(pagamento), sg.Push(), sg.Text('Valor Total: R$', font=("Helvetica", 16)),
+               sg.Text(key='-valortotal-', size=(10,1), font=("Helvetica", 20))]]
 
     janela9 = [[sg.Text('Cliente:'), sg.Text('',key='-cliente-'),sg.Push(), sg.Button('Selecione o Cliente')],
                [sg.Frame('Endereço', frame2)],
@@ -127,7 +131,7 @@ def tela_cons_cliente():
 def tela_adiciona_produto():
     lista = retorna_lista_produto_bd()
     janela17 = [[sg.Text('Selecione o Produto:')],
-                [sg.Combo(lista, size=(15,1)), sg.Spin([1,2,3,4,5,6,7,8,9], initial_value=1, size=(3,1))],
+                [sg.Combo(lista, size=(15,1), key='-selec_prod-'), sg.Spin([1,2,3,4,5,6,7,8,9], initial_value=1, size=(3,1))],
                 [sg.Button('Adicionar'), sg.Button('Cancelar')]]
 
     return sg.Window('Adiciona Produto', janela17, finalize=True)
@@ -135,6 +139,9 @@ def tela_adiciona_produto():
 
 janela1, janela2, janela3, janela4, janela5, janela6, janela7, janela8, janela9, janela10, \
 janela11, janela12, janela13, janela14, janela15, janela16, janela17 = tela_login(), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
+
+dados = []
+v = []
 
 while True:
     cria_bd()
@@ -286,9 +293,12 @@ while True:
             janela17 = tela_adiciona_produto()
 
         if eventos == 'Finalizar Venda':
+
             pass
 
+
         if eventos == 'Voltar':
+            dados = []
             janela9.hide()
             janela3 = tela_menu_admin()
 
@@ -366,17 +376,24 @@ while True:
             janela16.hide()
 
     if janela == janela17:
+
         if eventos == 'Adicionar':
-            produto = valores[0]
-            quant = int(valores[1])
-            iprod = (retornar_info_produto_bd(produto))
-            info_produto = [iprod[0][0],iprod[0][1],iprod[0][3], quant, (int(iprod[0][3]) * quant)]
-            janela9['-tabela-'].update(info_produto)
+            if valores['-selec_prod-'] != '':
+                produto = valores['-selec_prod-']
+                quant = int(valores[0])
+                iprod = (retornar_info_produto_bd(produto))
+                v_total = (int(iprod[0][3]) * quant)
+                v.append(int(v_total))
 
+                print(sum(v))
 
+                dados.append([iprod[0][0], iprod[0][1], iprod[0][3], quant, v_total])
 
-            janela9.enable()
-            janela17.hide()
+                janela9['-tabela-'].update(values=dados)
+                janela9['-valortotal-'].update(sum(v))
+
+                janela9.enable()
+                janela17.hide()
 
 
         if eventos == 'Cancelar':
