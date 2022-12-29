@@ -33,8 +33,12 @@ while True:
 
     if janela == janela2:   #Interações Janela 2 - Alterar Senha
         if eventos == 'Alterar Senha':
-            janela2.disable()
-            janela10 = tela_redefinir_senha()
+            if esqueci_senha_user_bd(valores['-usuario-'], valores['-email-']) == True:
+                usuario = valores['-usuario-']
+                janela2.disable()
+                janela10 = tela_redefinir_senha()
+            else:
+                sg.Popup('Usuario ou E-mail\nnao estão cadastrados.')
         if eventos == 'Voltar':
             janela2.hide()
             janela1 = tela_login()
@@ -178,7 +182,13 @@ while True:
 
     if janela == janela10:  # Interações Janela 10 - Redefinir Senha
         if eventos == 'Redefinir':
-            pass
+
+            if valores['-novasenha-'] == valores['-repnovasenha-']:
+                altera_senha_bd(usuario,valores['-novasenha-'])
+                sg.Popup('Senha Alterada.')
+                janela2.hide()
+                janela10.hide()
+                janela1 = tela_login()
 
         if eventos == 'Cancelar':
             janela2.hide()

@@ -69,7 +69,30 @@ def deleta_user_bd(selecao):
     ''', selecao)
     conn.commit()
     conn.close()
+def esqueci_senha_user_bd(usuario, email):
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT * FROM users WHERE (USER=? AND EMAIL=?)
+    ''', (usuario, email))
+    teste_esqueci_senha = cursor.fetchone()
+    conn.commit()
+    conn.close()
 
+    if teste_esqueci_senha is None:
+        return False
+    if (usuario in teste_esqueci_senha) and (email in teste_esqueci_senha):
+        return True
+    else:
+        return False
+def altera_senha_bd(usuario, senha):
+    hashsenha = sha256(senha.encode()).hexdigest()
+    conn = sqlite3.connect('App_Dados.db')
+    cursor = conn.cursor()
+    cursor.execute('''UPDATE users SET PASSWORD = ? WHERE USER = ?
+    ''', (hashsenha, usuario))
+    conn.commit()
+    conn.close()
 
 ###################### CLIENTES ######################
 
