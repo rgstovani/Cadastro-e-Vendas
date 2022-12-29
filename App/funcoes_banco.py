@@ -219,18 +219,17 @@ def cria_bd_vendas():
     RUA TEXT NOT NULL,
     NUMERO TEXT NOT NULL,
     CIDADE TEXT NOT NULL,
-    PRODUTOS,
     PAGAMENTO TEXT NOT NULL,
     VALOR TEXT NOT NULL);
     ''')
     conn.commit()
     conn.close()
-def add_vendas_bd(data, cliente, rua, numero, cidade, produtos, pagamento, valor):
+def add_vendas_bd(data, cliente, rua, numero, cidade, pagamento, valor):
     conn = sqlite3.connect('App_Dados.db')
     cursor = conn.cursor()
     cursor.execute('''
-    INSERT INTO vendas VALUES (:DATA, :CLIENTE, :RUA, :NUMERO, :CIDADE, :PRODUTOS, :PAGAMENTO, :VALOR)
-    ''', {'DATA': data, 'CLIENTE': cliente, 'RUA': rua, 'NUMERO': numero, 'CIDADE': cidade, 'PRODUTOS': produtos, 'PAGAMENTO': pagamento, 'VALOR': valor})
+    INSERT INTO vendas VALUES (:DATA, :CLIENTE, :RUA, :NUMERO, :CIDADE, :PAGAMENTO, :VALOR)
+    ''', {'DATA': data, 'CLIENTE': cliente, 'RUA': rua, 'NUMERO': numero, 'CIDADE': cidade, 'PAGAMENTO': pagamento, 'VALOR': valor})
     conn.commit()
     conn.close()
 def consulta_vendas_bd():

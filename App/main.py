@@ -158,25 +158,18 @@ while True:
             janela17 = tela_adiciona_produto()
 
         if eventos == 'Finalizar Venda':
-            pass
-            '''data = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+
+            data = datetime.now().strftime("%d-%m-%y %H:%M:%S")
             cliente = valores['-cliente-']
             rua = valores['-endereco-']
             numero = valores['-num-']
             cidade = valores['-cidade-']
-            #produtos = dados
+            #produtos = 'Roteador', 'Tp-Link', '100', 1, 100, 'monitor', 'lg', '500', 2, 1000
             pagamento = valores['-pagto-']
             valor = sum(v)
-            for lista in dados:
-                for item in lista:
-                    t.append(str(item))
 
-            print(t)
-            if cliente and rua and numero and cidade and t and pagamento and valor != "":
-                add_vendas_bd(data, cliente, rua, numero, cidade, t, pagamento, valor)
+            add_vendas_bd(data, cliente, rua, numero, cidade, pagamento, valor)
 
-            else:
-                sg.Popup('Preencha todos os campos.')'''
 
         if eventos == 'Voltar':
             dados = []

@@ -109,8 +109,8 @@ def tela_consulta_produtos():
 
     return sg.Window('Consulta de Produtos', janela12, finalize=True)
 def tela_consulta_vendas():
-    # vendas = tela_consulta_vendas()
-    janela13 = [[sg.Table('vendas', justification='left', headings=['ID', 'PRODUTO', 'MARCA', 'UNIDADE', 'VALOR'])],
+    vendas = consulta_vendas_bd()
+    janela13 = [[sg.Table(vendas, justification='left', headings=['ID', 'DATA', 'CLIENTE', 'RUA', 'NUMERO', 'CIDADE', 'PAGAMENTO', 'VALOR'])],
                 [sg.Button('Voltar')]]
 
     return sg.Window('Consulta de Vendas', janela13, finalize=True)
