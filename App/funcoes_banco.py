@@ -321,4 +321,3 @@ def consulta_cep(cep):
     localidade = end['localidade']
     uf = end['uf']
     return cep, logradouro, bairro, localidade, uf
-

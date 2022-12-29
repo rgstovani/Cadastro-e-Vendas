@@ -1,8 +1,5 @@
-import datetime as datetime
-
 from interface import *
 from datetime import datetime
-
 
 dados = []
 v = []
@@ -278,7 +275,3 @@ while True:
         if eventos == 'Cancelar':
             janela9.enable()
             janela17.hide()
-
-    print(eventos, valores)
-
-

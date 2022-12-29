@@ -4,7 +4,6 @@ from main import dados
 
 sg.theme('DarkPurple')
 
-
 def tela_login():
     janela1 = [[sg.Text('Usuario:')],
                [sg.Input(key='-usuario-', size=(30,1))],
@@ -91,8 +90,8 @@ def tela_nova_venda():
                [sg.Button('Finalizar Venda'), sg.Button('Voltar')]]
     return sg.Window('Nova Venda', janela9, finalize=True)
 def tela_redefinir_senha():
-    janela10 = [[sg.Text('Digite a nova senha: '), sg.Input(key='-novasenha-', size=(20,1))],
-                [sg.Text('Repita a nova senha: '), sg.Input(key='-repnovasenha-', size=(20,1))],
+    janela10 = [[sg.Text('Digite a nova senha: '), sg.Input(key='-novasenha-', size=(20,1), password_char='*')],
+                [sg.Text('Repita a nova senha: '), sg.Input(key='-repnovasenha-', size=(20,1), password_char='*')],
                 [sg.Button('Redefinir'), sg.Push(), sg.Button('Cancelar')]]
 
     return sg.Window('Redefinição de Senha', janela10, finalize=True)
@@ -140,9 +139,5 @@ def tela_adiciona_produto():
 
     return sg.Window('Adiciona Produto', janela17, finalize=True)
 
-
 janela1, janela2, janela3, janela4, janela5, janela6, janela7, janela8, janela9, janela10, \
 janela11, janela12, janela13, janela14, janela15, janela16, janela17 = tela_login(), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
-
-
-
