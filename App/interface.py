@@ -74,13 +74,13 @@ def tela_nova_venda():
     pagamento = ['Dinheiro', 'Cartão de Debito', 'Cartão de Credito', 'Cheque']
     frame1 = [[sg.Table(values=dados, headings=['Produto', 'Marca', 'Valor Unitario', 'Quant.', 'Valor Total'],
                         key='-tabela-', col_widths=[16,16,16,8,12], auto_size_columns=False, justification='left',
-                        background_color='gray', text_color='black')]]
-    frame2 = [[sg.Text('Rua:'), sg.Text(size=(30,1), key='-endereco-'), sg.Text('Numero:'),
-               sg.Text(size=(8,1), key='-num-'), sg.Text('Cidade:'), sg.Text(size=(20,1), key='-cidade-')]]
+                        background_color='gray', text_color='black', enable_events=True)]]
+    frame2 = [[sg.Text('Rua:'), sg.Input(size=(30,1), key='-endereco-'), sg.Text('Numero:'),
+               sg.Input(size=(8,1), key='-num-'), sg.Text('Cidade:'), sg.Input(size=(20,1), key='-cidade-')]]
     frame3 = [[sg.Text('Forma de Pagto'), sg.Combo(pagamento), sg.Push(), sg.Text('Valor Total: R$', font=("Helvetica", 16)),
-               sg.Text(key='-valortotal-', size=(10,1), font=("Helvetica", 20))]]
+               sg.Input(key='-valortotal-', size=(10,1), font=("Helvetica", 20))]]
 
-    janela9 = [[sg.Text('Cliente:'), sg.Text('',key='-cliente-'),sg.Push(), sg.Button('Selecione o Cliente')],
+    janela9 = [[sg.Text('Cliente:'), sg.Input('',key='-cliente-'),sg.Push(), sg.Button('Selecione o Cliente')],
                [sg.Frame('Endereço', frame2)],
                [sg.Frame('Produtos', frame1), sg.Button('Adicionar')],
                [sg.Frame('Pagamento', frame3)],
