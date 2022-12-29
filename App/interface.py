@@ -70,7 +70,6 @@ def tela_cadastro_produtos():
                [sg.Button('Cadastrar'), sg.Button('Voltar')]]
     return sg.Window('Cadastro de Produtos', janela8, finalize=True)
 def tela_nova_venda():
-
     pagamento = ['Dinheiro', 'Cartão de Debito', 'Cartão de Credito', 'Cheque']
     frame1 = [[sg.Table(values=dados, headings=['Produto', 'Marca', 'Valor Unitario', 'Quant.', 'Valor Total'],
                         key='-tabela-', col_widths=[16,16,16,8,12], auto_size_columns=False, justification='left',

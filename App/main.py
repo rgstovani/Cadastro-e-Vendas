@@ -168,8 +168,10 @@ while True:
             #produtos = 'Roteador', 'Tp-Link', '100', 1, 100, 'monitor', 'lg', '500', 2, 1000
             pagamento = valores['-pagto-']
             valor = sum(v)
-
             add_vendas_bd(data, cliente, rua, numero, cidade, pagamento, valor)
+            sg.Popup('Venda Registrada \ncom sucesso!')
+            janela9.hide()
+            janela3 = tela_menu_admin()
 
 
         if eventos == 'Voltar':
@@ -241,7 +243,7 @@ while True:
             janela11.enable()
             janela15.hide()
 
-    if janela == janela16:  # Interações Janela 16 - Exclusão de Clientes
+    if janela == janela16:  # Interações Janela 16 - Seleção de Clientes
         if eventos == 'Confirmar':
             selecao = valores['compra_selecao_cli']
             info_cliente = retornar_info_cliente_bd(selecao)
