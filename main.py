@@ -181,8 +181,8 @@ while True:
                 sg.Popup('Venda Registrada \ncom sucesso!')
                 jan9.hide()
                 jan3 = t_menu_admin()
-        else:
-            sg.Popup('Preencha todas as informações.')
+            else:
+                sg.Popup('Preencha todas as informações.')
 
         if eventos == 'Voltar':
             dados = []
