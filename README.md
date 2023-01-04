@@ -1,4 +1,4 @@
-# Projeto de cadastro e registro de venda #
+# Projeto de cadastro de clientes e registro de venda #
 
 Nesse projeto possui telas de:
 
